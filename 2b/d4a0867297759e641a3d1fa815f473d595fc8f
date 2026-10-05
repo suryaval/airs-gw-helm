@@ -1,0 +1,33 @@
+charts/airs-gw/Chart.yaml
+  s_811eb14baa5d6e::t_a7e77de0be1558 5
+charts/airs-gw/README.md
+  s_811eb14baa5d6e::t_eb5d0a27184922 53-125,158
+charts/airs-gw/docs/Configuration.md
+  s_811eb14baa5d6e::t_86fa72c2df699f 233-316
+charts/airs-gw/templates/NOTES.txt
+  s_811eb14baa5d6e::t_8a7cc7aa893148 4,8-9,12,14,17-50,72
+charts/airs-gw/templates/_helpers.tpl
+  s_811eb14baa5d6e::t_b805f432ac33fb 589-750
+charts/airs-gw/templates/gateway-api/gateway.yaml
+  s_811eb14baa5d6e::t_1aec22ece1852f 1-35
+charts/airs-gw/templates/gateway-api/httproute.yaml
+  s_811eb14baa5d6e::t_40cb70ebc9c1b5 1-78
+charts/airs-gw/values.yaml
+  s_811eb14baa5d6e::t_f806c007452dc1 201-287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "2bd4a0867297759e641a3d1fa815f473d595fc8f",
+  "prompts": {},
+  "sessions": {
+    "s_811eb14baa5d6e": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1ab35f16-d67a-4b2d-9d2d-5c9fb4531789",
+        "model": "unknown"
+      },
+      "human_author": "Surya Vallabhaneni <surya.vallabhaneni2@gmail.com>"
+    }
+  }
+}
