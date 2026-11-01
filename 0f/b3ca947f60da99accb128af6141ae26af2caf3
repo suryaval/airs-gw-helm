@@ -1,0 +1,26 @@
+charts/airs-gw/docs/Configuration.md
+  s_6ccd0fa0e2134e::t_32d6897425f589 260
+charts/airs-gw/templates/NOTES.txt
+  s_6ccd0fa0e2134e::t_d501424903e978 20-23,27,33,35,38-42
+  s_6ccd0fa0e2134e::t_0c1e46eb06f460 43
+charts/airs-gw/templates/_helpers.tpl
+  s_6ccd0fa0e2134e::t_d501424903e978 683
+  s_6ccd0fa0e2134e::t_fff74ed56a8223 642-645,659-682,684-692
+  s_6ccd0fa0e2134e::t_8ae8478165020b 693
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "0fb3ca947f60da99accb128af6141ae26af2caf3",
+  "prompts": {},
+  "sessions": {
+    "s_6ccd0fa0e2134e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18ebebcc-2aa3-4e15-9f6a-43420cb884b5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Surya Vallabhaneni <surya.vallabhaneni2@gmail.com>"
+    }
+  }
+}
