@@ -639,6 +639,10 @@ gatewayApi.validate
 {{- end }}
 {{- if and $gw.create (empty $gw.listeners) }}
 {{- $listener := $gw.listener | default dict -}}
+{{- $from := ((($listener.allowedRoutes | default dict).namespaces | default dict).from) | default "Same" -}}
+{{- if and $gw.namespace (ne $gw.namespace .Release.Namespace) (empty $route.parentRefs) (eq $from "Same") }}
+{{- fail (printf "gatewayApi.gateway.namespace is %q but the HTTPRoutes are created in release namespace %q, and the default listener only allows routes from its own namespace (allowedRoutes.namespaces.from=Same), so both routes would be rejected with NotAllowedByListeners. Set gatewayApi.gateway.listener.allowedRoutes.namespaces to allow the release namespace (e.g. from: All, or from: Selector with a matching label), or leave gatewayApi.gateway.namespace empty." $gw.namespace .Release.Namespace) }}
+{{- end }}
 {{- $protocol := $listener.protocol | default "HTTP" -}}
 {{- if not (has $protocol (list "HTTP" "HTTPS")) }}
 {{- fail (printf "gatewayApi.gateway.listener.protocol must be HTTP or HTTPS for HTTPRoute attachment, got %q." $protocol) }}
@@ -650,6 +654,41 @@ gatewayApi.validate
 {{- end }}
 {{- end }}
 {{- end }}
+{{- end -}}
+
+{{/*
+gatewayApi.baseUrl
+→ scheme://host[:port] for a hostname, derived from the Gateway listener the
+  HTTPRoutes attach to. Renders nothing when the listener is unknown (the
+  Gateway is managed outside this chart, or no HTTP/HTTPS listener matches).
+  Call with (dict "root" . "host" $hostname).
+*/}}
+{{- define "gatewayApi.baseUrl" -}}
+{{- $root := .root -}}
+{{- $gw := $root.Values.gatewayApi.gateway | default dict -}}
+{{- $refs := (($root.Values.gatewayApi.httpRoute | default dict).parentRefs) | default list -}}
+{{- $listener := dict -}}
+{{- if $gw.create -}}
+{{- if $gw.listeners -}}
+{{- $section := "" -}}
+{{- if $refs -}}
+{{- $section = (index $refs 0).sectionName | default "" -}}
+{{- end -}}
+{{- range $gw.listeners -}}
+{{- if and (empty $listener) (has .protocol (list "HTTP" "HTTPS")) (or (empty $section) (eq .name $section)) -}}
+{{- $listener = . -}}
+{{- end -}}
+{{- end -}}
+{{- else -}}
+{{- $listener = merge (dict) ($gw.listener | default dict) (dict "protocol" "HTTP" "port" 80) -}}
+{{- end -}}
+{{- end -}}
+{{- if not (empty $listener) -}}
+{{- $scheme := lower ($listener.protocol | default "HTTP") -}}
+{{- $port := $listener.port | default (ternary 443 80 (eq $scheme "https")) | int -}}
+{{- $default := ternary 443 80 (eq $scheme "https") -}}
+{{- printf "%s://%s" $scheme .host -}}{{- if ne $port $default -}}{{- printf ":%d" $port -}}{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

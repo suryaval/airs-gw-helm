@@ -257,7 +257,7 @@ Hostname and path semantics mirror the `ingress` block.
 | `gatewayApi.gatewayPath` | string | `"/"` | Gateway path, only used when `hostBased` is `false` |
 | `gatewayApi.gateway.create` | boolean | `true` | Create a `Gateway`. Set to `false` to attach the HTTPRoutes to a Gateway managed outside the chart (requires `gatewayApi.httpRoute.parentRefs`) |
 | `gatewayApi.gateway.name` | string | `""` | Gateway name (defaults to the release fullname) |
-| `gatewayApi.gateway.namespace` | string | `""` | Gateway namespace (defaults to the release namespace) |
+| `gatewayApi.gateway.namespace` | string | `""` | Gateway namespace (defaults to the release namespace). If set to a different namespace, `listener.allowedRoutes` must permit the release namespace (e.g. `from: All`), otherwise rendering fails |
 | `gatewayApi.gateway.gatewayClassName` | string | `"istio"` | `GatewayClass` to use, e.g. `istio`, `envoy-gateway`, `nginx`, `gke-l7-global-external-managed` |
 | `gatewayApi.gateway.annotations` | object | `{}` | Additional Gateway annotations |
 | `gatewayApi.gateway.labels` | object | `{}` | Additional Gateway labels |

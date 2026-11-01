@@ -17,19 +17,29 @@ MCP URL:
 {{- end }}
 
 {{- else if .Values.gatewayApi.enabled }}
+{{- $gwHost := .Values.gatewayApi.hostname }}
+{{- $mcpHost := ternary (include "gatewayApi.mcpHostname" .) .Values.gatewayApi.hostname .Values.gatewayApi.hostBased }}
+{{- $gwBase := include "gatewayApi.baseUrl" (dict "root" . "host" $gwHost) }}
+{{- $mcpBase := include "gatewayApi.baseUrl" (dict "root" . "host" $mcpHost) }}
 {{- if eq (include "gateway.enabled" .) "true" }}
 
 Gateway URL:
-  https://{{ .Values.gatewayApi.hostname }}{{ if not .Values.gatewayApi.hostBased }}{{ .Values.gatewayApi.gatewayPath | default "/" }}{{ end }}
+  {{ $gwBase | default $gwHost }}{{ if not .Values.gatewayApi.hostBased }}{{ .Values.gatewayApi.gatewayPath | default "/" }}{{ else }}/{{ end }}
 {{- end }}
 {{- if eq (include "mcp.enabled" .) "true" }}
 
 MCP URL:
 {{- if .Values.gatewayApi.hostBased }}
-  https://{{ include "gatewayApi.mcpHostname" . }}/
+  {{ $mcpBase | default $mcpHost }}/
 {{- else }}
-  https://{{ .Values.gatewayApi.hostname }}{{ .Values.gatewayApi.mcpPath | default "/mcp" }}
+  {{ $mcpBase | default $mcpHost }}{{ .Values.gatewayApi.mcpPath | default "/mcp" }}
 {{- end }}
+{{- end }}
+{{- if not $gwBase }}
+
+The URL scheme and port depend on the listener of the parent Gateway, which is
+not managed by this chart (or has no HTTP/HTTPS listener to match). Prefix the
+hostname with the scheme and port of the listener the HTTPRoutes attach to.
 {{- end }}
 
 {{- if (.Values.gatewayApi.gateway | default dict).create }}
